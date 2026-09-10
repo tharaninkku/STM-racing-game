@@ -10,6 +10,7 @@
 
 #include "stm32f411xe.h"
 #include "joystick.h"
+#include "display.h"
 
 /* นับ tick ที่ยังไม่ได้ประมวลผล ประกาศไว้ใน main.c */
 extern volatile uint32_t tick_pending;
@@ -86,4 +87,21 @@ void SysTick_Handler(void)
 void ADC_IRQHandler(void)
 {
     Joystick_IrqHandler();
+}
+
+/* ---- Display: OLED ผ่าน I2C1 + DMA1 Stream6 ---------------------------- */
+
+void DMA1_Stream6_IRQHandler(void)
+{
+    Display_DmaIrqHandler();
+}
+
+void I2C1_EV_IRQHandler(void)
+{
+    Display_I2cEventIrqHandler();
+}
+
+void I2C1_ER_IRQHandler(void)
+{
+    Display_I2cErrorIrqHandler();
 }
